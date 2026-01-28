@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title>Inbox</ion-title>
+        <ion-title>Brewhaus</ion-title>
       </ion-toolbar>
     </ion-header>
 
@@ -13,18 +13,18 @@
 
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Inbox</ion-title>
+          <ion-title size="large">Brewhaus</ion-title>
         </ion-toolbar>
       </ion-header>
 
       <ion-list>
-        <MessageListItem v-for="message in messages" :key="message.id" :message="message" />
+        <BreweryListItem v-for="brewery in breweries" :key="brewery.id" :brewery="brewery" />
       </ion-list>
     </ion-content>
   </ion-page>
 </template>
 
-<script setup lang="ts">
+<script setup async lang="ts">
 import {
   IonContent,
   IonHeader,
@@ -35,15 +35,19 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import MessageListItem from '@/components/MessageListItem.vue';
-import { getMessages, Message } from '@/data/messages';
+import BreweryListItem from '@/components/BreweryListItem.vue';
+import { getBreweries, Brewery } from '@/data/breweries';
 import { ref } from 'vue';
 
-const messages = ref<Message[]>(getMessages());
+const breweries = ref<Brewery[]>();
 
 const refresh = (ev: CustomEvent) => {
   setTimeout(() => {
     ev.detail.complete();
   }, 3000);
 };
+
+getBreweries().then((results) => {
+  breweries.value = results ?? [];
+});
 </script>

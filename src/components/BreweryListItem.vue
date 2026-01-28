@@ -1,17 +1,16 @@
 <template>
-  <ion-item v-if="message" :routerLink="'/message/' + message.id" :detail="false" class="list-item">
-    <div slot="start" :class="!message.read ? 'dot dot-unread' : 'dot'"></div>
+  <ion-item v-if="brewery" :routerLink="'/brewery/' + brewery.id" :detail="false" class="list-item">
     <ion-label class="ion-text-wrap">
       <h2>
-        {{ message.fromName }}
+        {{ brewery.name }}
         <span class="date">
-          <ion-note>{{ message.date }}</ion-note>
+          <ion-note>{{ brewery.city }}, {{ brewery.state }}</ion-note>
           <ion-icon aria-hidden="true" :icon="chevronForward" size="small" v-if="isIos()"></ion-icon>
         </span>
       </h2>
-      <h3>{{ message.subject }}</h3>
+      <h3>{{ brewery.name }}</h3>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        {{ brewery.address1 }}
       </p>
     </ion-label>
   </ion-item>
@@ -20,9 +19,10 @@
 <script setup lang="ts">
 import { IonIcon, IonItem, IonLabel, IonNote } from '@ionic/vue';
 import { chevronForward } from 'ionicons/icons';
+import {Brewery} from "@/data/breweries";
 
 defineProps({
-  message: Object,
+  brewery: Brewery,
 });
 
 const isIos = () => {
