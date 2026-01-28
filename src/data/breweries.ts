@@ -78,14 +78,30 @@ export class Brewery implements IBrewery {
   }
 }
 
-const breweries: Brewery[] = [];
-
-// @todo API call to get brewery list
-export const getBreweries = () => axios.get('https://api.openbrewerydb.org/v1/breweries')
+export const getBreweries = (page = 1, perPage = 20) => {
+  return axios.get(`https://api.openbrewerydb.org/v1/breweries?page=${page}&per_page=${perPage}`)
     .then((res) => {
       return res.data.map((el:any) => Brewery.fromApi(el));
     })
     .catch((err) => console.log(err));
+};
 
-// @todo API call to get Brewery Details
-export const getBrewery = (id: string) => breweries.find(m => m.id === id);
+export const getLocalBreweries = (location: {lat: number; lng: number}, page = 1, perPage = 20) => {
+  return axios.get(`https://api.openbrewerydb.org/v1/breweries?by_dist=${location.lat},${location.lng}&page=${page}&per_page=${perPage}`)
+      .then((res) => {
+        return res.data.map((el:any) => Brewery.fromApi(el));
+      })
+      .catch((err) => console.log(err));
+};
+
+export const getBrewery = (id: string) => axios.get(`https://api.openbrewerydb.org/v1/breweries/${id}`)
+  .then((res) => {
+    return Brewery.fromApi(res.data);
+  })
+  .catch((err) => console.log(err));
+
+export const searchBreweries = (query: string, page = 1, perPage = 20) => axios.get(`https://api.openbrewerydb.org/v1/breweries/search?query=${query}&page=${page}&per_page=${perPage}`)
+  .then((res) => {
+    return res.data.map((el:any) => Brewery.fromApi(el));
+  })
+  .catch((err) => console.log(err));

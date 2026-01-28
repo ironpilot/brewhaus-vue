@@ -47,7 +47,7 @@ import {
   IonToolbar,
 } from '@ionic/vue';
 import { personCircle } from 'ionicons/icons';
-import { getBrewery } from '../data/breweries';
+import { getBrewery } from '@/data/breweries';
 
 const getBackButtonText = () => {
   const win = window as any;
@@ -56,7 +56,7 @@ const getBackButtonText = () => {
 };
 
 const route = useRoute();
-const message = getBrewery(parseInt(route.params.id as string, 10));
+const message = getBrewery(route.params.id as string);
 </script>
 
 <style scoped>

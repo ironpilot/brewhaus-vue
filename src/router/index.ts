@@ -13,8 +13,8 @@ const routes: Array<RouteRecordRaw> = [
     component: HomePage
   },
   {
-    path: '/message/:id',
-    component: () => import('../views/ViewMessagePage.vue')
+    path: '/brewery/:id',
+    component: () => import('../views/ViewBreweryPage.vue')
   }
 ]
 
