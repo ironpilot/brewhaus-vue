@@ -8,24 +8,27 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true" v-if="message">
+    <ion-content :fullscreen="true" v-if="brewery">
       <ion-item>
-        <ion-icon aria-hidden="true" :icon="personCircle" color="primary"></ion-icon>
         <ion-label class="ion-text-wrap">
           <h2>
-            {{ message.fromName }}
+            {{ brewery.name }}
             <span class="date">
-              <ion-note>{{ message.date }}</ion-note>
+              <ion-note>{{ brewery.breweryType }}</ion-note>
             </span>
           </h2>
-          <h3>To: <ion-note>Me</ion-note></h3>
+          <h3><ion-note>({{ brewery.latitude }}, {{ brewery.longitude }})</ion-note></h3>
         </ion-label>
       </ion-item>
 
       <div class="ion-padding">
-        <h1>{{ message.subject }}</h1>
+        <h4><a :href="'tel:' + brewery.phone">{{ brewery.phone }}</a></h4>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          {{ brewery.address1 }}<br>
+          {{ brewery.city }}, {{ brewery.state }} {{ brewery.postalCode }}
+        </p>
+        <p v-if="brewery.websiteUrl">
+          <a @click.stop.prevent="onViewWebsite(brewery.websiteUrl)">{{ brewery.websiteUrl }}</a>
         </p>
       </div>
     </ion-content>
@@ -39,24 +42,36 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
-  IonIcon,
   IonItem,
   IonLabel,
   IonNote,
   IonPage,
   IonToolbar,
 } from '@ionic/vue';
-import { personCircle } from 'ionicons/icons';
-import { getBrewery } from '@/data/breweries';
+import {Brewery, getBrewery} from '@/data/breweries';
+import {ref} from "vue";
+import {Browser} from "@capacitor/browser";
 
 const getBackButtonText = () => {
   const win = window as any;
   const mode = win && win.Ionic && win.Ionic.mode;
-  return mode === 'ios' ? 'Inbox' : '';
+  return mode === 'ios' ? 'Brewery List' : '';
 };
 
 const route = useRoute();
-const message = getBrewery(route.params.id as string);
+const brewery = ref<Brewery | undefined>(undefined);
+
+getBrewery(route.params.id as string).then((result: Brewery | void) => {
+  if (result) {
+    brewery.value = result;
+  } else {
+    brewery.value = undefined;
+  }
+}).catch((e) => console.log(e));
+
+const onViewWebsite = (url: string) => {
+  Browser.open({ url });
+};
 </script>
 
 <style scoped>
@@ -78,11 +93,6 @@ ion-item .date {
   float: right;
   align-items: center;
   display: flex;
-}
-
-ion-item ion-icon {
-  font-size: 42px;
-  margin-right: 8px;
 }
 
 ion-item ion-note {

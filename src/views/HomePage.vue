@@ -13,7 +13,10 @@
 
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Brewhaus</ion-title>
+          <ion-title size="large">
+            <img src="/assets/beer-mug.svg" alt="Company Logo" class="company-logo">
+            Brewhaus
+          </ion-title>
         </ion-toolbar>
       </ion-header>
 
@@ -156,3 +159,9 @@ const ionInfinite = (event: InfiniteScrollCustomEvent) => {
   }
 };
 </script>
+
+<style scoped>
+.company-logo {
+  height: 30px;
+}
+</style>
