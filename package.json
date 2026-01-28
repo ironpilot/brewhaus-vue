@@ -16,11 +16,13 @@
     "url": "https://github.com/ironpilot/brewhaus-vue"
   },
   "dependencies": {
+    "@capacitor/android": "^8.0.2",
     "@capacitor/app": "8.0.0",
     "@capacitor/browser": "^8.0.0",
     "@capacitor/core": "8.0.2",
     "@capacitor/geolocation": "^8.0.0",
     "@capacitor/haptics": "8.0.0",
+    "@capacitor/ios": "^8.0.2",
     "@capacitor/keyboard": "8.0.0",
     "@capacitor/status-bar": "8.0.0",
     "@ionic/vue": "^7.0.0",
@@ -32,6 +34,7 @@
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "8.0.2",
     "@types/jest": "^27.0.2",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
