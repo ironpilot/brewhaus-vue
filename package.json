@@ -1,6 +1,8 @@
 {
   "name": "brewhaus",
   "version": "0.0.1",
+  "description": "Fictitious Brewing Company",
+  "author": "Scott Henscheid",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -8,6 +10,10 @@
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ironpilot/brewhaus-vue"
   },
   "dependencies": {
     "@capacitor/app": "8.0.0",
@@ -47,6 +53,5 @@
     "jest": "^27.3.1",
     "ts-jest": "^27.0.7",
     "typescript": "^4.3.5"
-  },
-  "description": "An Ionic project"
+  }
 }
