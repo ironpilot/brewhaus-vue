@@ -56,7 +56,7 @@ import {
 import {Geolocation, type PermissionStatus, Position} from '@capacitor/geolocation';
 import BreweryListItem from '@/components/BreweryListItem.vue';
 import {getBreweries, Brewery, searchBreweries, getLocalBreweries} from '@/data/breweries';
-import {reactive, ref} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 
 const breweries = reactive<Brewery[]>([]);
 const searchQuery = ref('');
@@ -64,38 +64,44 @@ const pageSize = ref(20);
 const currentLocation = ref<Position | undefined>(undefined);
 
 const refresh = (ev: CustomEvent) => {
-  // @todo implement a refresh function
-  setTimeout(() => {
-    ev.detail.complete();
-  }, 3000);
+  searchQuery.value = '';
+  breweries.length = 0;
+  getList();
+  ev.detail.complete();
 };
 
-// Try to get local breweries to populate if location is available.
-Geolocation.checkPermissions()
-  .then((status: PermissionStatus) => {
-    if (status.coarseLocation === 'granted' || status.location === 'granted') {
-      Geolocation.getCurrentPosition().then((location) => {
-        currentLocation.value = location;
-        populateBreweryList();
-      });
-    } else {
-      Geolocation.requestPermissions().then((status) => {
+onMounted(() => {
+  getList();
+});
+
+const getList = () => {
+  // Try to get local breweries to populate if location is available.
+  Geolocation.checkPermissions()
+      .then((status: PermissionStatus) => {
         if (status.coarseLocation === 'granted' || status.location === 'granted') {
-          Geolocation.getCurrentPosition().then((location) => {
+          Geolocation.getCurrentPosition({enableHighAccuracy: true, timeout: 20000}).then((location) => {
             currentLocation.value = location;
             populateBreweryList();
           });
         } else {
-          populateBreweryList();
+          Geolocation.requestPermissions().then((status) => {
+            if (status.coarseLocation === 'granted' || status.location === 'granted') {
+              Geolocation.getCurrentPosition({enableHighAccuracy: true, timeout: 20000}).then((location) => {
+                currentLocation.value = location;
+                populateBreweryList();
+              });
+            } else {
+              populateBreweryList();
+            }
+          }).catch(() => {
+            populateBreweryList();
+          });
         }
-      }).catch(() => {
+      })
+      .catch(() => {
         populateBreweryList();
       });
-    }
-  })
-  .catch(() => {
-    populateBreweryList();
-  });
+}
 
 const populateBreweryList = () => {
   const nextPage: number = Math.floor(breweries.length / pageSize.value) + 1;
